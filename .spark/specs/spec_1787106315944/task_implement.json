@@ -1,0 +1,419 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "type": "app_init",
+      "name": "应用初始化任务",
+      "status": "completed",
+      "subtasks": [
+        "初始化布局导航文件Layout",
+        "初始化主题文件",
+        "初始化占位页面和路由",
+        "本任务以编译与日志检查为界，日志确认无错即提交；运行时核验统一由验收测试任务承担"
+      ],
+      "beginTime": 1787106510454,
+      "endTime": 1787106964130
+    },
+    {
+      "id": 2,
+      "name": "代码架构设计与全局骨架搭建",
+      "type": "normal",
+      "status": "completed",
+      "subtasks": [
+        "读取 coding-guide skill 明确项目结构与编码规范",
+        "前端：搭建 AppLayout（侧边栏+顶部栏）与 AuthLayout 骨架，配置路由守卫",
+        "前端：初始化 Zustand stores（auth/i18n/api-config）与 i18n 语言资源框架",
+        "前端：初始化 axiosForBackend 封装与 React Query Provider",
+        "服务端：创建 shared 类型定义文件（各模块 DTO 类型）",
+        "服务端：创建 auth、materials、purchase、research、protocols、settings 共 6 个模块目录占位并注册到 AppModule",
+        "确认整体目录结构与文件命名规范"
+      ],
+      "requirements": [
+        "1.1",
+        "1.2",
+        "1.3",
+        "8.1",
+        "8.2"
+      ],
+      "write_scope": [
+        "client/src/layouts/**",
+        "client/src/stores/**",
+        "client/src/i18n/**",
+        "client/src/lib/**",
+        "client/src/routes.tsx",
+        "server/modules/**",
+        "shared/**"
+      ],
+      "read_scope": [
+        "server/app.module.ts",
+        "package.json",
+        "shared/api.interface.ts"
+      ],
+      "acceptance": "应用可正常启动，登录后能看到侧边栏+顶部栏布局，路由可在各页面间切换，i18n 切换可用",
+      "dependencies": [],
+      "endTime": 1787106964130
+    },
+    {
+      "id": 3,
+      "name": "数据库表创建与数据初始化",
+      "type": "normal",
+      "status": "completed",
+      "subtasks": [
+        "读取 coding-guide skill 数据库章节与 schema.ts 模板",
+        "创建实验室用户表（lab_user）并插入 2 个预设账号",
+        "创建物资表（material）与采购记录表（purchase_record）",
+        "创建上传记录表（upload_record）",
+        "创建 Protocol 表（protocol）并插入 5 条预置示例",
+        "创建课题方案表（research_plan）",
+        "创建全局配置表（global_config）",
+        "插入约 10 条各类别示例物资数据及对应采购记录",
+        "生成 shared 类型定义文件"
+      ],
+      "requirements": [
+        "1.5",
+        "2.1",
+        "6.5"
+      ],
+      "write_scope": [
+        "server/database/schema.ts",
+        "server/database/seed.ts",
+        "shared/types.ts"
+      ],
+      "read_scope": [
+        "server/database/schema.ts"
+      ],
+      "acceptance": "所有业务表创建成功，预置账号、示例物资、预置 Protocol 均可通过查询接口获取到",
+      "dependencies": [],
+      "beginTime": 1787106964332,
+      "endTime": 1787107196029
+    },
+    {
+      "id": 4,
+      "name": "登录认证与账号管理模块开发（含前后端）",
+      "type": "normal",
+      "status": "completed",
+      "subtasks": [
+        "读取 coding-guide skill 与 authn-guide skill",
+        "服务端：实现 AuthService（密码校验/bcrypt、session 管理）与 AuthController",
+        "服务端：实现账号管理接口（列表/修改，管理员权限校验）",
+        "前端：实现登录页（居中卡片、表单校验、错误提示、回车提交）",
+        "前端：实现路由守卫与 useAuth hook",
+        "前端：顶部栏用户菜单（用户名显示、退出登录）",
+        "前后端联调：登录/登出/获取当前用户/会话持久化验证"
+      ],
+      "requirements": [
+        "1.1",
+        "1.2",
+        "1.3",
+        "1.4",
+        "1.5",
+        "7.5"
+      ],
+      "write_scope": [
+        "server/modules/auth/**",
+        "server/modules/settings/**",
+        "client/src/pages/Login/**",
+        "client/src/layouts/components/TopBar/**",
+        "client/src/hooks/useAuth.ts",
+        "client/src/stores/authStore.ts"
+      ],
+      "read_scope": [
+        "shared/types.ts",
+        "server/app.module.ts",
+        "server/database/schema.ts"
+      ],
+      "acceptance": "登录成功后跳转物资总览页，刷新保持登录，未登录自动跳回登录页，管理员可在设置页修改账号密码",
+      "dependencies": [
+        2,
+        3
+      ],
+      "beginTime": 1787107196287,
+      "endTime": 1787107932732
+    },
+    {
+      "id": 5,
+      "name": "物资总览与详情模块开发（含前后端）",
+      "type": "normal",
+      "status": "completed",
+      "subtasks": [
+        "读取 coding-guide skill 前端表格与服务端 CRUD 章节",
+        "服务端：实现物资列表/详情/统计/导出/编辑/删除接口",
+        "服务端：实现价格历史查询与涨跌幅计算逻辑",
+        "前端：实现物资总览页（统计卡片、筛选搜索排序栏、数据表格、低库存标红）",
+        "前端：实现物资详情页（基本信息卡片、价格历史时间线、统计摘要）",
+        "前端：实现 Excel/CSV 导出功能",
+        "前后端联调：列表筛选排序、详情跳转、编辑删除、导出验证"
+      ],
+      "requirements": [
+        "2.1",
+        "2.2",
+        "2.3",
+        "2.4",
+        "2.5",
+        "4.1",
+        "4.2",
+        "4.3",
+        "4.4"
+      ],
+      "write_scope": [
+        "server/modules/materials/**",
+        "client/src/pages/Materials/**",
+        "client/src/components/materials/**"
+      ],
+      "read_scope": [
+        "shared/types.ts",
+        "server/database/schema.ts",
+        "server/modules/auth/**"
+      ],
+      "acceptance": "物资列表可筛选搜索排序导出，低库存行标红，点击可进入详情页查看价格历史时间线和涨跌幅",
+      "dependencies": [
+        2,
+        3,
+        4
+      ],
+      "endTime": 1787107932732
+    },
+    {
+      "id": 6,
+      "name": "采购录入与AI解析模块开发（含前后端）",
+      "type": "normal",
+      "status": "completed",
+      "subtasks": [
+        "读取 coding-guide skill 与 plugin-guide skill（AI 调用模式）",
+        "服务端：实现 LLMService（OpenAI 兼容格式封装，支持自定义 baseUrl/key/model）",
+        "服务端：实现文件上传解析接口（xlsx 解析原始表格 + LLM 结构化提取）",
+        "服务端：实现手动添加接口与同货号历史价格比对逻辑",
+        "服务端：实现上传历史记录接口与确认入库接口",
+        "前端：实现拖拽上传区（react-dropzone）、解析进度与置信度概览面板",
+        "前端：实现手动添加表单（展开式）与价格上涨标红提示",
+        "前端：实现上传历史列表",
+        "前后端联调：上传解析、手动录入、历史价格比对验证"
+      ],
+      "requirements": [
+        "3.1",
+        "3.2",
+        "3.3",
+        "3.4"
+      ],
+      "write_scope": [
+        "server/modules/purchase/**",
+        "server/common/services/llm.service.ts",
+        "client/src/pages/Purchase/**",
+        "client/src/components/purchase/**"
+      ],
+      "read_scope": [
+        "shared/types.ts",
+        "server/database/schema.ts",
+        "server/modules/materials/**"
+      ],
+      "acceptance": "可拖拽上传 Excel/CSV 文件并得到 AI 解析结果（带置信度），手动添加时同货号自动比对历史价格并显示涨跌幅",
+      "dependencies": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "beginTime": 1787107932934,
+      "endTime": 1787109193381
+    },
+    {
+      "id": 7,
+      "name": "课题辅助AI设计模块开发（含前后端）",
+      "type": "normal",
+      "status": "completed",
+      "subtasks": [
+        "读取 coding-guide skill 与 plugin-guide skill",
+        "服务端：实现课题推荐接口（LLM 生成推荐方案 + 现有试剂匹配 + 经费节省估算）",
+        "服务端：实现方案保存/列表/删除接口",
+        "前端：实现研究方向输入区（大文本框 + 提交按钮 + 加载动画）",
+        "前端：实现推荐结果卡片列表（研究角度、靶点/通路、可用试剂徽章、节省经费）",
+        "前端：实现方案保存与历史记录功能",
+        "前后端联调：AI 生成、试剂匹配、方案保存验证"
+      ],
+      "requirements": [
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4",
+        "5.5"
+      ],
+      "write_scope": [
+        "server/modules/research/**",
+        "client/src/pages/Research/**",
+        "client/src/components/research/**"
+      ],
+      "read_scope": [
+        "shared/types.ts",
+        "server/database/schema.ts",
+        "server/common/services/llm.service.ts"
+      ],
+      "acceptance": "输入研究方向后 AI 返回 3-5 个推荐方案，标注可用试剂与节省经费，可保存为历史记录",
+      "dependencies": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "beginTime": 1787109193579,
+      "endTime": 1787109635661
+    },
+    {
+      "id": 8,
+      "name": "Protocol 实验方案库模块开发（含前后端）",
+      "type": "normal",
+      "status": "completed",
+      "subtasks": [
+        "读取 coding-guide skill 与 client-builtins-file-storage-service skill",
+        "服务端：实现 Protocol CRUD 接口（列表/详情/创建/编辑/删除）",
+        "前端：实现 Protocol 库页（筛选搜索栏、卡片网格、新建弹窗）",
+        "前端：实现 Protocol 详情页（标题区、正文内容区、附件列表）",
+        "前端：实现文件上传（平台 file storage service）与附件预览下载",
+        "前后端联调：新建（含文件上传）、列表筛选、详情查看、编辑删除验证"
+      ],
+      "requirements": [
+        "6.1",
+        "6.2",
+        "6.3",
+        "6.4",
+        "6.5"
+      ],
+      "write_scope": [
+        "server/modules/protocols/**",
+        "client/src/pages/Protocols/**",
+        "client/src/components/protocols/**"
+      ],
+      "read_scope": [
+        "shared/types.ts",
+        "server/database/schema.ts"
+      ],
+      "acceptance": "Protocol 卡片列表可筛选搜索，点击查看详情含正文与附件，可新建（支持粘贴文本+上传文件）、编辑和删除",
+      "dependencies": [
+        2,
+        3,
+        4
+      ],
+      "beginTime": 1787107932934,
+      "endTime": 1787109193381
+    },
+    {
+      "id": 9,
+      "name": "系统设置与API配置模块开发（含前后端）",
+      "type": "normal",
+      "status": "completed",
+      "subtasks": [
+        "读取 coding-guide skill",
+        "服务端：实现全局 API 配置接口（加密存储 AES-256）与测试连接接口",
+        "服务端：实现账号管理接口（管理员权限校验 + 当前密码验证）",
+        "前端：实现系统设置页（个人 API 配置卡片、全局 API 配置卡片、账号管理卡片）",
+        "前端：个人 API Key 存入 localStorage，开关控制优先使用",
+        "前端：顶部栏显示当前使用 Key 状态（个人/全局）",
+        "前端：测试 API 连接按钮与结果反馈动画",
+        "前后端联调：全局配置加密存取、测试连接、账号修改验证"
+      ],
+      "requirements": [
+        "7.1",
+        "7.2",
+        "7.3",
+        "7.4",
+        "7.5"
+      ],
+      "write_scope": [
+        "server/modules/settings/**",
+        "server/common/services/crypto.service.ts",
+        "client/src/pages/Settings/**",
+        "client/src/layouts/components/TopBar/**",
+        "client/src/stores/apiConfigStore.ts"
+      ],
+      "read_scope": [
+        "shared/types.ts",
+        "server/database/schema.ts",
+        "server/modules/auth/**",
+        "server/common/services/llm.service.ts"
+      ],
+      "acceptance": "个人 API 配置可保存到 localStorage，全局配置加密存入数据库，测试连接按钮可验证 API 可用性，管理员可修改账号",
+      "dependencies": [
+        2,
+        3,
+        4
+      ],
+      "beginTime": 1787107932934,
+      "endTime": 1787109193381
+    },
+    {
+      "id": 10,
+      "name": "中英文双语全站适配",
+      "type": "normal",
+      "status": "completed",
+      "subtasks": [
+        "补全所有页面的中英文语言资源文件（zh/en）",
+        "替换所有硬编码文本为 t() 函数调用",
+        "顶部栏语言切换按钮功能完善与状态显示",
+        "验证所有页面文案在两种语言下完整显示",
+        "确保语言切换后 localStorage 持久化、刷新后保持"
+      ],
+      "requirements": [
+        "8.1",
+        "8.2",
+        "8.3",
+        "8.4"
+      ],
+      "write_scope": [
+        "client/src/i18n/**",
+        "client/src/pages/**",
+        "client/src/components/**",
+        "client/src/layouts/**"
+      ],
+      "read_scope": [
+        "client/src/stores/i18nStore.ts"
+      ],
+      "acceptance": "点击中/EN 按钮全站文案实时切换，刷新后保持用户选择，无遗漏硬编码文本",
+      "dependencies": [
+        2,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "beginTime": 1787109635874,
+      "endTime": 1787110194053
+    },
+    {
+      "id": 11,
+      "name": "验收测试",
+      "type": "normal",
+      "status": "completed",
+      "subtasks": [
+        "读取 testing-guide skill",
+        "架构与入口检查：确认侧边栏+顶部栏布局完整，路由可正常切换，登录页为入口",
+        "核心验收目标1：登录与权限体系——双角色登录成功/失败、路由守卫拦截、退出登录、管理员修改账号密码",
+        "核心验收目标2：物资全链路——总览筛选排序导出+低库存标红、采购录入AI解析+手动录入、详情页价格历史时间线与涨跌幅",
+        "核心验收目标3：AI 能力——课题辅助设计生成推荐+试剂匹配+方案保存、API 配置测试连接+个人/全局切换",
+        "非核心降级范围：AI 生成内容的科研准确性、导出文件的精细格式、文件预览的完整渲染、双语翻译的专业度"
+      ],
+      "requirements": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8"
+      ],
+      "write_scope": [],
+      "read_scope": [],
+      "acceptance": "三大核心验收目标全部通过，应用主流程无阻塞性问题",
+      "dependencies": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "beginTime": 1787110194254,
+      "endTime": 1787111194826
+    }
+  ]
+}

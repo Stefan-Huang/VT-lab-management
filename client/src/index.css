@@ -1,0 +1,229 @@
+@import '@lark-apaas/client-toolkit/lib/index.css';
+@import "tw-animate-css";
+@import "./tailwind-theme.css";
+@import "./typography.css";
+
+@source "../../node_modules/streamdown/dist/*.js";
+@config "../../tailwind.config.ts";
+
+/* 全局背景：简约几何线条 + 微妙渐变动画（登录页和登录后通用） */
+.auth-bg,
+.global-app-bg {
+  position: relative;
+  background:
+    radial-gradient(ellipse at 20% 20%, rgba(56, 178, 172, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(100, 150, 200, 0.08) 0%, transparent 50%),
+    linear-gradient(135deg, #f5f7fa 0%, #f0f4f8 50%, #f8fafc 100%);
+  overflow: hidden;
+}
+
+.global-app-bg::before,
+.auth-bg::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    linear-gradient(135deg, transparent 49.5%, rgba(26, 54, 93, 0.05) 49.5%, rgba(26, 54, 93, 0.05) 50.5%, transparent 50.5%),
+    linear-gradient(45deg, transparent 49.5%, rgba(26, 54, 93, 0.03) 49.5%, rgba(26, 54, 93, 0.03) 50.5%, transparent 50.5%);
+  background-size: 80px 80px, 60px 60px;
+  animation: bgShift 20s ease-in-out infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.global-app-bg::after,
+.auth-bg::after {
+  content: '';
+  position: fixed;
+  top: -20%;
+  right: -5%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(56, 178, 172, 0.08) 0%, transparent 65%);
+  border-radius: 50%;
+  animation: floatOrb1 20s ease-in-out infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* 第二个浮动光斑 */
+.global-app-bg .bg-orb-2,
+.auth-bg .bg-orb-2 {
+  position: fixed;
+  bottom: -15%;
+  left: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(100, 150, 200, 0.07) 0%, transparent 65%);
+  border-radius: 50%;
+  animation: floatOrb2 25s ease-in-out infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* 三角形几何装饰 */
+.global-app-bg .bg-shape,
+.auth-bg .bg-shape {
+  position: fixed;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.04;
+}
+
+.global-app-bg .bg-shape-1,
+.auth-bg .bg-shape-1 {
+  top: 15%;
+  right: 20%;
+  width: 0;
+  height: 0;
+  border-left: 40px solid transparent;
+  border-right: 40px solid transparent;
+  border-bottom: 70px solid rgba(26, 54, 93, 0.8);
+  animation: shapeFloat 18s ease-in-out infinite;
+}
+
+.global-app-bg .bg-shape-2,
+.auth-bg .bg-shape-2 {
+  bottom: 25%;
+  left: 15%;
+  width: 60px;
+  height: 60px;
+  border: 2px solid rgba(56, 178, 172, 0.8);
+  transform: rotate(45deg);
+  animation: shapeFloat 22s ease-in-out infinite reverse;
+}
+
+.global-app-bg .bg-shape-3,
+.auth-bg .bg-shape-3 {
+  top: 60%;
+  right: 10%;
+  width: 24px;
+  height: 24px;
+  background: rgba(26, 54, 93, 0.8);
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  animation: shapeFloat 15s ease-in-out infinite 3s;
+}
+
+@keyframes bgShift {
+  0%, 100% { background-position: 0 0, 0 0; opacity: 0.7; }
+  50% { background-position: 40px 40px, -30px -30px; opacity: 1; }
+}
+
+@keyframes floatOrb1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-30px, 40px) scale(1.05); }
+  66% { transform: translate(20px, -20px) scale(0.95); }
+}
+
+@keyframes floatOrb2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(50px, -30px) scale(1.1); }
+}
+
+@keyframes shapeFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(10deg); }
+}
+
+.bg-shape-2 {
+  animation-name: shapeFloat2 !important;
+}
+
+@keyframes shapeFloat2 {
+  0%, 100% { transform: translateY(0) rotate(45deg); }
+  50% { transform: translateY(20px) rotate(55deg); }
+}
+
+/* 毛玻璃效果 */
+.glass-sidebar {
+  background: rgba(255, 255, 255, 0.7) !important;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-right: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+
+.glass-topbar {
+  background: rgba(255, 255, 255, 0.75) !important;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+
+/* 内容卡片半透明毛玻璃效果，透出背景 */
+.global-app-bg {
+  --color-card: hsl(0 0% 100% / 0.82);
+  --color-background: transparent;
+  --color-border: hsl(220 14% 89% / 0.6);
+}
+
+.global-app-bg .bg-card {
+  backdrop-filter: blur(8px) saturate(160%);
+  -webkit-backdrop-filter: blur(8px) saturate(160%);
+}
+
+.global-app-bg .bg-background {
+  background: transparent;
+}
+
+/* 卡片 hover 效果 */
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.12);
+}
+
+/* 页面淡入动画 */
+.page-fade-in {
+  animation: pageFadeIn 0.3s ease-out;
+}
+
+@keyframes pageFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 登录卡片入场动画 */
+.login-card-enter {
+  animation: loginCardEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes loginCardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* 按钮 hover 微缩放 */
+button {
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* 统计数字计数过渡 */
+.count-up-number {
+  font-variant-numeric: tabular-nums;
+}
